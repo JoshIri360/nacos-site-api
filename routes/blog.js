@@ -8,6 +8,7 @@ const {
   updatePost,
   deletePost,
 } = require("../controllers/blog");
+const authMiddleware = require("../middlewares/auth");
 
 const multerStorage = multer.diskStorage({
   destination: (req, file, cb) => {
@@ -38,7 +39,7 @@ const router = express.Router();
 
 router.route("/").get(getPosts);
 
-router.post("/", upload.single("photo"), createPost);
+router.post("/", authMiddleware, upload.single("photo"), createPost);
 
 router.route("/:id").get(getPost).patch(updatePost).delete(deletePost);
 
