@@ -10,12 +10,15 @@ const blogRoutes = require("./routes/blog");
 // middlewares
 const authMiddleware = require("./middlewares/auth");
 const errorHandler = require("./middlewares/error-handler");
+const { createProxyMiddleware } = require('http-proxy-middleware');
 
 const app = express();
 app.use(express.json());
 
 app.use("/api/auth", authRoutes);
 app.use("/api/posts", blogRoutes);
+app.use('/', createProxyMiddleware({ target: 'https://nacoslmu.onrender.com', changeOrigin: true }));
+app.use('/api', createProxyMiddleware({ target: 'https://nacoslmu.onrender.com', changeOrigin: true }));
 
 app.use(errorHandler);
 
